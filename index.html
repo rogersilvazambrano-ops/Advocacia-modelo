@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fernandes Rodrigues &amp; Silva Advogados | Santa Maria/RS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:   #0f1c2e;
+      --gold:   #b5924c;
+      --gold-light: #d4af73;
+      --cream:  #f7f4ef;
+      --warm-white: #fdfcfa;
+      --text:   #1a1a1a;
+      --muted:  #6b6b6b;
+      --border: #e2ddd6;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--text); background: var(--warm-white); }
+
+    /* ── NAV (topo escuro, estilo Jobim) ── */
+    .topbar {
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 36px;
+      font-size: .75rem; color: rgba(255,255,255,.55);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .topbar a { color: rgba(255,255,255,.55); text-decoration: none; }
+    .topbar-social { display: flex; gap: 1rem; }
+    .topbar-social a { color: rgba(255,255,255,.45); font-size: .8rem; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 70px;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .nav-logo img { height: 44px; object-fit: contain; }
+    .nav-logo-text {
+      font-family: var(--font-display); font-size: 1.5rem; color: var(--navy);
+      text-decoration: none; letter-spacing: .02em;
+    }
+    .nav-logo-text span { color: var(--gold); }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: var(--navy); text-decoration: none; font-size: .82rem;
+      letter-spacing: .07em; text-transform: uppercase; transition: color .2s;
+      position: relative; padding-bottom: 4px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 100%;
+      height: 2px; background: var(--gold); transition: right .25s;
+    }
+    .nav-links a:hover::after { right: 0; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--navy); color: #fff; padding: .55rem 1.4rem;
+      text-decoration: none; font-size: .78rem; letter-spacing: .09em;
+      text-transform: uppercase; transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--gold); }
+
+    /* ── HERO ESTILO JOBIM ── */
+    #hero {
+      position: relative; overflow: hidden;
+      height: 92vh; min-height: 560px;
+    }
+    /* Slides */
+    .slide {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity 1.2s ease;
+    }
+    .slide.active { opacity: 1; }
+    .slide::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(10,20,35,.75) 40%, rgba(10,20,35,.3));
+    }
+    .slide-1 { background-image: url('https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=1600&q=80'); }
+    .slide-2 { background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1600&q=80'); }
+    .slide-3 { background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1600&q=80'); }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      height: 100%; display: flex; flex-direction: column; justify-content: center;
+      padding: 0 8%;
+    }
+    .hero-tag {
+      font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold-light); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .hero-tag::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+    .slide-texts { position: relative; }
+    .slide-text {
+      position: absolute; top: 0; left: 0;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .8s ease, transform .8s ease;
+      pointer-events: none;
+    }
+    .slide-text.active {
+      opacity: 1; transform: translateY(0); position: relative; pointer-events: auto;
+    }
+    .slide-text h2 {
+      font-size: .85rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold-light); margin-bottom: .6rem;
+    }
+    .slide-text h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      color: #fff; line-height: 1.05; font-weight: 600; margin-bottom: 1rem;
+    }
+    .slide-text p {
+      color: rgba(255,255,255,.65); font-size: 1rem;
+      max-width: 480px; line-height: 1.8; margin-bottom: 2rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--gold); color: #fff; padding: .85rem 2.2rem;
+      text-decoration: none; font-size: .82rem; letter-spacing: .08em;
+      text-transform: uppercase; transition: background .2s;
+    }
+    .btn-hero-primary:hover { background: var(--gold-light); }
+    .btn-hero-outline {
+      border: 1px solid rgba(255,255,255,.4); color: rgba(255,255,255,.85);
+      padding: .85rem 2.2rem; text-decoration: none; font-size: .82rem;
+      letter-spacing: .08em; text-transform: uppercase; transition: border-color .2s;
+    }
+    .btn-hero-outline:hover { border-color: var(--gold-light); color: var(--gold-light); }
+
+    /* Dots */
+    .hero-dots {
+      position: absolute; bottom: 2.5rem; left: 8%; z-index: 3;
+      display: flex; gap: .6rem;
+    }
+    .hero-dot {
+      width: 28px; height: 3px; background: rgba(255,255,255,.3);
+      cursor: pointer; transition: background .3s;
+    }
+    .hero-dot.active { background: var(--gold); }
+
+    /* Quick links estilo Jobim */
+    .hero-quick {
+      position: absolute; bottom: 0; right: 0; top: 0; z-index: 3;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .hero-quick-item {
+      background: rgba(10,20,35,.85); color: #fff;
+      padding: 1.1rem 1.8rem; text-align: right;
+      border-top: 1px solid rgba(255,255,255,.1);
+      cursor: pointer; transition: background .2s; min-width: 170px;
+    }
+    .hero-quick-item:hover { background: var(--gold); }
+    .hero-quick-item .qi-icon { font-size: 1.2rem; margin-bottom: .3rem; }
+    .hero-quick-item .qi-label { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ── SEÇÕES (estilo L'Aquila daqui pra baixo) ── */
+    /* coluna central mais estreita = leitura mais vertical, mesmo em telas largas */
+    section { padding: 100px max(5%, calc((100% - 760px) / 2)); }
+    .section-eyebrow {
+      font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem;
+    }
+    .section-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 3rem);
+      color: var(--navy); line-height: 1.15; margin-bottom: 1.2rem;
+    }
+    .section-sub { color: var(--muted); max-width: 560px; font-size: .95rem; line-height: 1.75; }
+
+    /* DIFERENCIAIS */
+    #diferenciais { background: var(--cream); }
+    .diferenciais-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 1.5px; margin-top: 3.5rem; background: var(--border);
+    }
+    .diferencial-card { background: var(--warm-white); padding: 2.5rem 2rem; transition: background .25s; }
+    .diferencial-card:hover { background: var(--navy); }
+    .diferencial-card:hover .dc-title,
+    .diferencial-card:hover .dc-text { color: rgba(255,255,255,.85); }
+    .diferencial-card:hover .dc-icon { color: var(--gold-light); }
+    .dc-icon { font-size: 1.4rem; color: var(--gold); margin-bottom: 1rem; transition: color .25s; }
+    .dc-title { font-family: var(--font-display); font-size: 1.25rem; color: var(--navy); margin-bottom: .6rem; transition: color .25s; }
+    .dc-text { font-size: .87rem; color: var(--muted); line-height: 1.7; transition: color .25s; }
+
+    /* SOBRE */
+    #sobre { background: var(--warm-white); }
+    .sobre-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: start; margin-top: 3rem; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .sobre-img-wrap { position: relative; }
+    .sobre-img-wrap img { width: 100%; height: 420px; object-fit: cover; display: block; }
+    .sobre-img-wrap::after {
+      content: ''; position: absolute; bottom: -16px; right: -16px;
+      width: 55%; height: 55%; border: 2px solid var(--gold); z-index: -1;
+    }
+    .sobre-badges { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.8rem 0; }
+    .badge { border: 1px solid var(--border); padding: .4rem 1rem; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .sobre-text { font-size: .95rem; color: var(--muted); line-height: 1.85; margin-bottom: 1rem; }
+    .btn-primary {
+      display: inline-block; background: var(--navy); color: #fff; padding: .85rem 2rem;
+      text-decoration: none; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--gold); }
+
+    /* ÁREAS */
+    #areas { background: var(--navy); }
+    #areas .section-title { color: #fff; }
+    #areas .section-eyebrow { color: var(--gold-light); }
+    #areas .section-eyebrow::before { background: var(--gold-light); }
+    .areas-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; margin-top: 3.5rem; background: rgba(255,255,255,.08);
+    }
+    .area-card { background: var(--navy); padding: 2rem 1.8rem; border-bottom: 2px solid transparent; transition: border-color .2s, background .2s; }
+    .area-card:hover { background: #16273d; border-bottom-color: var(--gold); }
+    .area-card h3 { font-family: var(--font-display); font-size: 1.15rem; color: #fff; margin-bottom: .5rem; }
+    .area-card p { font-size: .82rem; color: rgba(255,255,255,.45); line-height: 1.6; }
+
+    /* EQUIPE */
+    #equipe { background: var(--cream); }
+    .equipe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3.5rem; }
+    .membro-card { background: var(--warm-white); overflow: hidden; }
+    .membro-img { width: 100%; height: 300px; object-fit: cover; display: block; filter: grayscale(25%); transition: filter .3s; }
+    .membro-card:hover .membro-img { filter: grayscale(0); }
+    .membro-info { padding: 1.4rem; border-top: 3px solid var(--gold); }
+    .membro-nome { font-family: var(--font-display); font-size: 1.2rem; color: var(--navy); }
+    .membro-cargo { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-top: .3rem; }
+
+    /* DEPOIMENTOS */
+    #depoimentos { background: var(--warm-white); }
+    .depo-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3rem; }
+    .depo-card { background: var(--cream); padding: 2rem; border-left: 3px solid var(--gold); }
+    .depo-stars { color: var(--gold); font-size: .9rem; margin-bottom: .8rem; }
+    .depo-text { font-size: .9rem; color: var(--muted); line-height: 1.75; font-style: italic; margin-bottom: 1.2rem; }
+    .depo-author { font-size: .78rem; font-weight: 500; color: var(--navy); text-transform: uppercase; letter-spacing: .08em; }
+
+    /* REDES SOCIAIS */
+    #redes { background: var(--cream); }
+    .social-embed-wrap { margin-top: 3rem; display: flex; justify-content: center; }
+    .social-embed-wrap .fb-page { width: 100%; max-width: 500px; }
+    .social-links { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
+    .social-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--warm-white); border: 1px solid var(--border);
+      padding: 1.2rem 1.4rem; text-decoration: none; transition: border-color .2s, background .2s;
+    }
+    .social-card:hover { border-color: var(--gold); background: #fff; }
+    .sc-icon {
+      width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
+      background: var(--navy); color: var(--gold-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.1rem;
+    }
+    .sc-title { font-family: var(--font-display); font-size: 1.05rem; color: var(--navy); }
+    .sc-text { font-size: .78rem; color: var(--muted); letter-spacing: .02em; margin-top: .15rem; }
+
+    /* BLOG */
+    #blog { background: var(--warm-white); }
+    .blog-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+    .post-card { background: var(--warm-white); overflow: hidden; }
+    .post-img { width: 100%; height: 320px; object-fit: cover; display: block; transition: transform .4s; }
+    .post-card:hover .post-img { transform: scale(1.03); }
+    .post-body { padding: 1.5rem; }
+    .post-tag { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+    .post-title { font-family: var(--font-display); font-size: 1.15rem; color: var(--navy); margin: .5rem 0 .8rem; line-height: 1.3; }
+    .post-excerpt { font-size: .83rem; color: var(--muted); line-height: 1.7; }
+    .post-link { display: inline-block; margin-top: 1rem; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .post-link:hover { border-bottom-color: var(--gold); }
+
+    /* CTA */
+    #cta-faixa { background: linear-gradient(90deg, var(--navy) 0%, #1a2f4a 100%); padding: 90px 5%; text-align: center; }
+    #cta-faixa .section-title { color: #fff; margin: 0 auto 1rem; max-width: 620px; }
+    #cta-faixa p { color: rgba(255,255,255,.6); margin-bottom: 2rem; }
+    .cta-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-outline-light { border: 1px solid rgba(255,255,255,.35); color: rgba(255,255,255,.85); padding: .85rem 2rem; text-decoration: none; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; transition: border-color .2s; }
+    .btn-outline-light:hover { border-color: var(--gold-light); color: var(--gold-light); }
+
+    /* CONTATO */
+    #contato { background: var(--warm-white); }
+    .contato-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-top: 3rem; }
+    .unidades { display: flex; flex-direction: column; gap: 2rem; }
+    .unidade h3 { font-family: var(--font-display); font-size: 1.05rem; color: var(--navy); margin-bottom: .4rem; }
+    .unidade p { font-size: .84rem; color: var(--muted); line-height: 1.8; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--navy); margin-bottom: .4rem; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: .75rem 1rem; border: 1px solid var(--border);
+      background: var(--warm-white); font-family: var(--font-body); font-size: .9rem; color: var(--text);
+      outline: none; transition: border-color .2s; appearance: none;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-submit { background: var(--navy); color: #fff; border: none; cursor: pointer; padding: .9rem 2.4rem; font-family: var(--font-body); font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; transition: background .2s; }
+    .form-submit:hover { background: var(--gold); }
+
+    /* FOOTER */
+    footer { background: var(--navy); color: rgba(255,255,255,.5); padding: 60px 5% 30px; }
+    .footer-top { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 3rem; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .footer-brand { font-family: var(--font-display); font-size: 1.3rem; color: #fff; margin-bottom: .8rem; }
+    .footer-brand span { color: var(--gold-light); }
+    .footer-desc { font-size: .82rem; line-height: 1.7; }
+    .footer-col h4 { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: .5rem; }
+    .footer-col ul li a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .82rem; transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--gold-light); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: .78rem; flex-wrap: wrap; gap: 1rem; }
+    .footer-bottom a { color: rgba(255,255,255,.35); text-decoration: none; }
+
+    /* ── HAMBURGER ── */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .nav-hamburger span { width: 24px; height: 2px; background: var(--navy); display: block; transition: transform .3s, opacity .3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; flex-direction: column;
+      position: fixed; top: 70px; left: 0; right: 0; bottom: 0;
+      background: #fff; z-index: 99;
+      padding: 2rem 5%;
+      border-top: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--navy); text-decoration: none; font-size: 1.1rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+      letter-spacing: .04em;
+    }
+    .mobile-menu .mob-cta {
+      margin-top: 1.5rem; background: var(--navy); color: #fff !important;
+      text-align: center; padding: 1rem !important; border-bottom: none !important;
+      font-size: .85rem !important; letter-spacing: .09em; text-transform: uppercase;
+    }
+
+    /* ── TABLET (≤ 1024px) ── */
+    @media (max-width: 1024px) {
+      /* footer-top já é coluna única por padrão */
+    }
+
+    /* ── MOBILE (≤ 860px) ── */
+    @media (max-width: 860px) {
+      .topbar { display: none; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+
+      #hero { height: 100svh; min-height: 500px; }
+      .slide::after { background: linear-gradient(to bottom, rgba(10,20,35,.5) 0%, rgba(10,20,35,.82) 100%); }
+      .hero-content { padding: 0 6%; justify-content: flex-end; padding-bottom: 6rem; }
+      .hero-tag { font-size: .68rem; }
+      .slide-text h1 { font-size: clamp(2rem, 8vw, 3rem); }
+      .slide-text p { font-size: .88rem; max-width: 100%; }
+      .hero-btns { flex-direction: column; gap: .75rem; }
+      .btn-hero-primary, .btn-hero-outline { text-align: center; padding: .85rem 1.5rem; }
+      .hero-dots { bottom: 1.8rem; left: 6%; }
+      .hero-quick { display: none; }
+
+      section { padding: 64px 5%; }
+      .diferenciais-grid { grid-template-columns: 1fr; }
+      .sobre-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .sobre-img-wrap img { height: 280px; }
+      .sobre-img-wrap::after { display: none; }
+      .areas-grid { grid-template-columns: 1fr 1fr; }
+      .equipe-grid { grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+      .membro-img { height: 220px; }
+      .depo-grid { grid-template-columns: 1fr; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .contato-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: .6rem; }
+    }
+
+    /* ── SMALL MOBILE (≤ 480px) ── */
+    @media (max-width: 480px) {
+      section { padding: 52px 4%; }
+      .areas-grid { grid-template-columns: 1fr; }
+      .equipe-grid { grid-template-columns: 1fr; }
+      .hero-content { padding: 0 4%; padding-bottom: 5rem; }
+      nav { padding: 0 4%; }
+      .cta-actions { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-outline-light { text-align: center; width: 100%; max-width: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR (estilo Jobim) -->
+<div class="topbar">
+  <span><a href="mailto:contato@fernandesrodriguesesilva.com.br">contato@fernandesrodriguesesilva.com.br</a> &nbsp;|&nbsp; Santa Maria/RS</span>
+  <div class="topbar-social">
+    <a href="https://www.facebook.com/fernandesrodriguesesilva" target="_blank" rel="noopener">Facebook</a>
+    <a href="https://www.instagram.com/fernandesrodriguesesilva" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://wa.me/5555981282138" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo-text">Fernandes Rodrigues <span>&</span> Silva</a>
+  <ul class="nav-links">
+    <li><a href="#sobre">O Escritório</a></li>
+    <li><a href="#equipe">Profissionais</a></li>
+    <li><a href="#areas">Áreas de Atuação</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="https://wa.me/5555981282138" class="nav-cta" target="_blank" rel="noopener">Agendar Consulta</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre" onclick="closeMenu()">O Escritório</a>
+  <a href="#equipe" onclick="closeMenu()">Profissionais</a>
+  <a href="#areas" onclick="closeMenu()">Áreas de Atuação</a>
+  <a href="#depoimentos" onclick="closeMenu()">Depoimentos</a>
+  <a href="#redes" onclick="closeMenu()">Redes Sociais</a>
+  <a href="#blog" onclick="closeMenu()">Blog</a>
+  <a href="#contato" onclick="closeMenu()">Contato</a>
+  <a href="https://wa.me/5555981282138" class="mob-cta" target="_blank" rel="noopener">Agendar Consulta →</a>
+</div>
+
+<!-- HERO ESTILO JOBIM -->
+<section id="hero">
+  <div class="slide slide-1 active"></div>
+  <div class="slide slide-2"></div>
+  <div class="slide slide-3"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Advocacia Comprometida e Independente</div>
+    <div class="slide-texts">
+      <div class="slide-text active">
+        <h2>O Escritório</h2>
+        <h1>Construindo a história<br>dos próximos 100 anos</h1>
+        <p>Tradição, ética e compromisso — a base de uma advocacia multidisciplinar focada no presente e no futuro.</p>
+        <div class="hero-btns">
+          <a href="#sobre" class="btn-hero-primary">Conheça o Escritório</a>
+          <a href="#areas" class="btn-hero-outline">Áreas de Atuação</a>
+        </div>
+      </div>
+      <div class="slide-text">
+        <h2>Profissionais</h2>
+        <h1>Altamente qualificados<br>para defender você</h1>
+        <p>Uma equipe de advogados especializados, prontos para oferecer soluções nas mais variadas áreas do direito.</p>
+        <div class="hero-btns">
+          <a href="#equipe" class="btn-hero-primary">Ver Profissionais</a>
+          <a href="https://wa.me/5555981282138" class="btn-hero-outline" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        </div>
+      </div>
+      <div class="slide-text">
+        <h2>Contato</h2>
+        <h1>Atendimento em Santa Maria<br>e digital para todo o Brasil</h1>
+        <p>No coração de Santa Maria/RS, com atendimento 100% digital para clientes em qualquer estado.</p>
+        <div class="hero-btns">
+          <a href="#contato" class="btn-hero-primary">Como Chegar</a>
+          <a href="https://wa.me/5555981282138" class="btn-hero-outline" target="_blank" rel="noopener">Agendar Consulta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-dots">
+    <div class="hero-dot active" onclick="goSlide(0)"></div>
+    <div class="hero-dot" onclick="goSlide(1)"></div>
+    <div class="hero-dot" onclick="goSlide(2)"></div>
+  </div>
+
+  <div class="hero-quick">
+    <div class="hero-quick-item" onclick="location.href='#areas'">
+      <div class="qi-icon">⚖</div>
+      <div class="qi-label">Áreas de Atuação</div>
+    </div>
+    <div class="hero-quick-item" onclick="location.href='#equipe'">
+      <div class="qi-icon">👤</div>
+      <div class="qi-label">Profissionais</div>
+    </div>
+    <div class="hero-quick-item" onclick="location.href='#contato'">
+      <div class="qi-icon">📍</div>
+      <div class="qi-label">Localização</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais">
+  <div class="section-eyebrow">Nossos Diferenciais</div>
+  <h2 class="section-title">Uma advocacia construída<br>para proteger você</h2>
+  <p class="section-sub">Excelência técnica, sensibilidade humana e atuação estratégica reunidas em um único escritório.</p>
+  <div class="diferenciais-grid">
+    <div class="diferencial-card">
+      <div class="dc-icon">◈</div>
+      <h3 class="dc-title">Estratégia Personalizada</h3>
+      <p class="dc-text">Cada caso recebe análise jurídica criteriosa e um plano de ação único, alinhado aos seus objetivos.</p>
+    </div>
+    <div class="diferencial-card">
+      <div class="dc-icon">◈</div>
+      <h3 class="dc-title">Atendimento Humanizado</h3>
+      <p class="dc-text">Escuta ativa, empatia e respeito ao momento de cada cliente — sem burocracia desnecessária.</p>
+    </div>
+    <div class="diferencial-card">
+      <div class="dc-icon">◈</div>
+      <h3 class="dc-title">Compromisso Integral</h3>
+      <p class="dc-text">Atuamos com transparência e dedicação em cada etapa do processo, do início ao desfecho.</p>
+    </div>
+    <div class="diferencial-card">
+      <div class="dc-icon">◈</div>
+      <h3 class="dc-title">Experiência Consolidada</h3>
+      <p class="dc-text">Mais de 26 anos de prática jurídica, hoje também com atendimento digital para clientes de todo o Brasil.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="sobre-grid">
+    <div class="sobre-img-wrap">
+      <img src="https://ugc.production.linktr.ee/28c66f65-86fb-4f21-990c-60f22e650552_IMG-20240221-154814-489.jpeg?io=true&size=avatar-v3_0" alt="Fernandes Rodrigues & Silva Advogados" />
+    </div>
+    <div>
+      <div class="section-eyebrow">O Escritório</div>
+      <h2 class="section-title">Tradição e história não se constroem da noite para o dia</h2>
+      <p class="sobre-text">Sociedade de advogados sediada em Santa Maria/RS, preparada para atender digitalmente todo o Brasil, com atuação especializada em desbloqueio de valores em conta bancária e defesa em execuções.</p>
+      <p class="sobre-text">Mais de 26 anos de atuação e experiência jurídica, com profissionais pautados pela ética, transparência e boa-fé — para garantir os seus direitos do início ao fim do processo.</p>
+      <div class="sobre-badges">
+        <span class="badge">5,0 ★ no Google</span>
+        <span class="badge">Atendimento Digital Nacional</span>
+        <span class="badge">Defesa em Execuções</span>
+        <span class="badge">26+ Anos</span>
+      </div>
+      <a href="https://wa.me/5555981282138" class="btn-primary" target="_blank" rel="noopener">Agendar Consulta</a>
+    </div>
+  </div>
+</section>
+
+<!-- ÁREAS -->
+<section id="areas">
+  <div class="section-eyebrow">Áreas de Atuação</div>
+  <h2 class="section-title" style="color:#fff">Defesa especializada<br>em todas as frentes</h2>
+  <p class="section-sub" style="color:rgba(255,255,255,.55)">Conduzimos cada demanda com técnica, discrição e profundidade.</p>
+  <div class="areas-grid">
+    <div class="area-card"><h3>Direito Bancário</h3><p>Desbloqueio de valores em conta bancária e defesa em execuções.</p></div>
+    <div class="area-card"><h3>Direito de Família e Sucessões</h3><p>Divórcio, guarda, pensão, inventário e partilha.</p></div>
+    <div class="area-card"><h3>Direito Civil</h3><p>Contratos, responsabilidade civil e obrigações.</p></div>
+    <div class="area-card"><h3>Direito Empresarial</h3><p>Constituição, fusões, dissolução e contencioso societário.</p></div>
+    <div class="area-card"><h3>Direito Trabalhista</h3><p>Defesa de empregados e empregadores em todas as instâncias.</p></div>
+    <div class="area-card"><h3>Direito Tributário</h3><p>Planejamento tributário, autuações e execuções fiscais.</p></div>
+    <div class="area-card"><h3>Direito Penal</h3><p>Defesa criminal em crimes comuns e de colarinho branco.</p></div>
+    <div class="area-card"><h3>Direito Previdenciário</h3><p>Aposentadorias, benefícios e revisões junto ao INSS.</p></div>
+    <div class="area-card"><h3>Direito Administrativo</h3><p>Licitações, contratos públicos e improbidade administrativa.</p></div>
+    <div class="area-card"><h3>Direito do Consumidor</h3><p>Proteção e defesa em relações de consumo.</p></div>
+    <div class="area-card"><h3>Tribunais Superiores</h3><p>Atuação no STJ, STF e TRF em recursos especiais.</p></div>
+    <div class="area-card"><h3>Negociações e Soluções</h3><p>Mediação, arbitragem e acordos extrajudiciais.</p></div>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section id="equipe">
+  <div class="section-eyebrow">Profissionais</div>
+  <h2 class="section-title">Altamente qualificados</h2>
+  <p class="section-sub">Advogados especializados prontos para oferecer soluções nas mais variadas áreas do direito.</p>
+  <div class="equipe-grid">
+    <div class="membro-card">
+      <img class="membro-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80" alt="Dr." />
+      <div class="membro-info">
+        <div class="membro-nome">Dr. Nome Sobrenome</div>
+        <div class="membro-cargo">Sócio Fundador · Direito Empresarial</div>
+      </div>
+    </div>
+    <div class="membro-card">
+      <img class="membro-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80" alt="Dra." />
+      <div class="membro-info">
+        <div class="membro-nome">Dra. Nome Sobrenome</div>
+        <div class="membro-cargo">Sócia · Direito de Família</div>
+      </div>
+    </div>
+    <div class="membro-card">
+      <img class="membro-img" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80" alt="Dr." />
+      <div class="membro-info">
+        <div class="membro-nome">Dr. Nome Sobrenome</div>
+        <div class="membro-cargo">Associado · Direito Tributário</div>
+      </div>
+    </div>
+    <div class="membro-card">
+      <img class="membro-img" src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&q=80" alt="Dra." />
+      <div class="membro-info">
+        <div class="membro-nome">Dra. Nome Sobrenome</div>
+        <div class="membro-cargo">Associada · Direito Trabalhista</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="section-eyebrow">Depoimentos</div>
+  <h2 class="section-title">5,0 ★ no Google<br>com mais de 20 avaliações</h2>
+  <p class="section-sub">Um retrato real do que os clientes dizem sobre o atendimento do escritório.</p>
+  <div class="depo-grid">
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">Equipe descrita como extremamente competente, séria e transparente, com um atendimento humanizado do início ao fim do processo.</p>
+      <div class="depo-author">Avaliação verificada no Google</div>
+    </div>
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">Cliente relata satisfação com o atendimento recebido e destaca a seriedade e competência dos profissionais do escritório.</p>
+      <div class="depo-author">Avaliação verificada no Google</div>
+    </div>
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">Outro relato menciona a rapidez na resolução da causa, somada à honestidade e ao senso de responsabilidade da equipe.</p>
+      <div class="depo-author">Avaliação verificada no Google</div>
+    </div>
+  </div>
+</section>
+
+<!-- REDES SOCIAIS -->
+<section id="redes">
+  <div class="section-eyebrow">Redes Sociais</div>
+  <h2 class="section-title">Acompanhe nosso dia a dia</h2>
+  <p class="section-sub">Fotos, vídeos e bastidores direto do nosso Facebook e Instagram.</p>
+
+  <div class="social-embed-wrap">
+    <div id="fb-root"></div>
+    <div class="fb-page"
+      data-href="https://www.facebook.com/fernandesrodriguesesilva"
+      data-tabs="timeline"
+      data-height="640"
+      data-small-header="false"
+      data-adapt-container-width="true"
+      data-hide-cover="false"
+      data-show-facepile="true">
+      <blockquote cite="https://www.facebook.com/fernandesrodriguesesilva" class="fb-xfbml-parse-ignore">
+        <a href="https://www.facebook.com/fernandesrodriguesesilva" target="_blank" rel="noopener">Fernandes Rodrigues &amp; Silva Advogados</a>
+      </blockquote>
+    </div>
+  </div>
+
+  <div class="social-links">
+    <a href="https://www.instagram.com/fernandesrodriguesesilva" target="_blank" rel="noopener" class="social-card">
+      <div class="sc-icon">◎</div>
+      <div>
+        <div class="sc-title">@fernandesrodriguesesilva</div>
+        <div class="sc-text">Instagram · Direito de Família e Sucessões</div>
+      </div>
+    </a>
+    <a href="https://www.instagram.com/fernandesrodriguesesilva_dbv" target="_blank" rel="noopener" class="social-card">
+      <div class="sc-icon">◎</div>
+      <div>
+        <div class="sc-title">@fernandesrodriguesesilva_dbv</div>
+        <div class="sc-text">Instagram · Desbloqueio de Valores e Defesa em Execuções</div>
+      </div>
+    </a>
+    <a href="https://wa.me/5555981282138" target="_blank" rel="noopener" class="social-card">
+      <div class="sc-icon">☏</div>
+      <div>
+        <div class="sc-title">Fale agora pelo WhatsApp</div>
+        <div class="sc-text">Atendimento direto com a equipe</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-eyebrow">Acontece</div>
+  <h2 class="section-title">Conteúdos exclusivos</h2>
+  <p class="section-sub">Acompanhe nossas publicações e informativos jurídicos.</p>
+  <div class="blog-grid">
+    <div class="post-card">
+      <div style="overflow:hidden"><img class="post-img" src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80" alt="" /></div>
+      <div class="post-body">
+        <div class="post-tag">Direito Tributário · Jan 2025</div>
+        <h3 class="post-title">Reforma tributária: o que muda para sua empresa em 2025</h3>
+        <p class="post-excerpt">Com a promulgação da reforma, diversas obrigações fiscais entram em vigor neste ano. Saiba como se preparar.</p>
+        <a href="#" class="post-link">Ler mais →</a>
+      </div>
+    </div>
+    <div class="post-card">
+      <div style="overflow:hidden"><img class="post-img" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80" alt="" /></div>
+      <div class="post-body">
+        <div class="post-tag">Direito Trabalhista · Dez 2024</div>
+        <h3 class="post-title">Teletrabalho e controle de jornada: os novos riscos jurídicos</h3>
+        <p class="post-excerpt">A modalidade de home office consolidada traz novos desafios para empregadores e empregados.</p>
+        <a href="#" class="post-link">Ler mais →</a>
+      </div>
+    </div>
+    <div class="post-card">
+      <div style="overflow:hidden"><img class="post-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="" /></div>
+      <div class="post-body">
+        <div class="post-tag">Direito de Família · Nov 2024</div>
+        <h3 class="post-title">Inventário extrajudicial: quando é possível e as vantagens</h3>
+        <p class="post-excerpt">Em muitos casos, o inventário pode ser feito em cartório, de forma mais rápida e econômica.</p>
+        <a href="#" class="post-link">Ler mais →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-faixa">
+  <h2 class="section-title">Você merece segurança jurídica<br>e tranquilidade para avançar.</h2>
+  <p>Agende uma análise estratégica e descubra como podemos proteger o que mais importa.</p>
+  <div class="cta-actions">
+    <a href="https://wa.me/5555981282138" class="btn-primary" target="_blank" rel="noopener">Falar no WhatsApp →</a>
+    <a href="mailto:contato@fernandesrodriguesesilva.com.br" class="btn-outline-light">Enviar E-mail</a>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="section-eyebrow">Contato</div>
+  <h2 class="section-title">Fale conosco</h2>
+  <div class="contato-grid">
+    <div class="unidades">
+      <div class="unidade">
+        <h3>Santa Maria — RS</h3>
+        <p>Rua Doutor Bozano, nº 1.147, sala 311<br>Centro — CEP 97015-000<br>(55) 98128-2138</p>
+        <p style="margin-top:.8rem"><a href="https://www.google.com/maps/place/Fernandes+Rodrigues+%26+Silva+Advogados+%7C+Santa+Maria+%7C+Invent%C3%A1rio+%7C+Fam%C3%ADlia/@-29.6869766,-53.8063915,15z" target="_blank" rel="noopener" style="color:var(--gold); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; border-bottom:1px solid var(--gold);">Ver no Google Maps →</a></p>
+      </div>
+    </div>
+    <div>
+      <div class="form-group"><label>Nome completo</label><input type="text" placeholder="Seu nome" /></div>
+      <div class="form-group"><label>E-mail</label><input type="email" placeholder="seu@email.com" /></div>
+      <div class="form-group">
+        <label>Área de interesse</label>
+        <select>
+          <option>Selecione a área...</option>
+          <option>Direito Civil</option><option>Direito Empresarial</option>
+          <option>Direito Trabalhista</option><option>Direito Tributário</option>
+          <option>Direito de Família</option><option>Direito Penal</option><option>Outra</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Mensagem</label><textarea placeholder="Descreva brevemente sua situação..."></textarea></div>
+      <button class="form-submit">Enviar Mensagem</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Fernandes Rodrigues <span>&</span> Silva</div>
+      <p class="footer-desc">Sociedade de advogados em Santa Maria/RS, com atendimento digital para todo o Brasil — ética, transparência e mais de 26 anos de experiência jurídica.</p>
+    </div>
+    <div class="footer-col"><h4>O Escritório</h4><ul><li><a href="#sobre">Quem Somos</a></li><li><a href="#equipe">Profissionais</a></li><li><a href="#redes">Redes Sociais</a></li><li><a href="#blog">Blog</a></li></ul></div>
+    <div class="footer-col"><h4>Áreas</h4><ul><li><a href="#areas">Direito Bancário</a></li><li><a href="#areas">Direito de Família</a></li><li><a href="#areas">Direito Empresarial</a></li><li><a href="#areas">Ver todas</a></li></ul></div>
+    <div class="footer-col"><h4>Contato</h4><ul><li><a href="https://wa.me/5555981282138" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:contato@fernandesrodriguesesilva.com.br">E-mail</a></li><li><a href="https://www.instagram.com/fernandesrodriguesesilva" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.facebook.com/fernandesrodriguesesilva" target="_blank" rel="noopener">Facebook</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Fernandes Rodrigues & Silva Advogados · Santa Maria/RS · Todos os direitos reservados</span>
+    <a href="https://www.instagram.com/fernandesrodriguesesilva_dbv" target="_blank" rel="noopener">@fernandesrodriguesesilva_dbv</a>
+  </div>
+</footer>
+
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v19.0"></script>
+
+<script>
+  // Slider
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const texts = document.querySelectorAll('.slide-text');
+  const dots = document.querySelectorAll('.hero-dot');
+
+  function goSlide(n) {
+    slides[current].classList.remove('active');
+    texts[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    texts[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  setInterval(() => goSlide((current + 1) % slides.length), 5000);
+
+  // Mobile menu
+  function toggleMenu() {
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileMenu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+</script>
+
+</body>
+</html>
